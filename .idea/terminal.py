@@ -9,26 +9,30 @@ class Terminal(tkinter.Frame):
         self.bedienung_org_frame = tkinter.Frame(root)
         self.bedienung_org_frame.pack(sid = "top")
         #verbinden btn
-        self.verbinden_btn = tkinter.Button(self.bedienung_org_frame, text = "Verbinden", width = 12, pady = 2)
-        self.verbinden_btn.grid(column=3, row=0)
+        self.verbinden_btn = tkinter.Button(self.bedienung_org_frame, text = "Verbinden", width = 12, pady = 2, bg="orange red")
+        self.verbinden_btn.grid(column=4, row=0, padx=10)
         #dropdown com
         self.drop_down_com_var = tkinter.IntVar()
-        self.drop_down_com = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_com_var)
+        self.drop_down_com = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_com_var, width=5)
         self.drop_down_com.grid(column=0, row=0)
         self.drop_down_com["values"] = (1, 2, 3, 4, 5, 6)
         self.drop_down_com.current(0)
         #dropdown baud
         self.drop_down_baud_var = tkinter.IntVar()
-        self.drop_down_baud = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_baud_var)
+        self.drop_down_baud = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_baud_var, width=10)
         self.drop_down_baud["values"] = (110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000)
         self.drop_down_baud.current(11)
-        self.drop_down_baud.grid(column=1, row=0)
+        self.drop_down_baud.grid(column=1, row=0, padx=20)
         #dropdown terminierung
         self.drop_down_ter_var = tkinter.StringVar()
-        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var)
+        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var, width=5)
         self.drop_down_ter["values"] = ("\\r", "\\n", "\\r\\n")
         self.drop_down_ter.current(0)
         self.drop_down_ter.grid(column=2, row=0)
+        #autosroll checkbox
+        self.autoscroll_checkbox_var = tkinter.IntVar()
+        self.autoscroll_checkbox = tkinter.Checkbutton(self.bedienung_org_frame, variable=self.autoscroll_checkbox_var)
+        self.autoscroll_checkbox.grid(column=3, row=0, padx=10)
         #srcoll
         self.scroll_org_frame = tkinter.Frame(root)
         self.scroll_org_frame.pack(side = "top")
@@ -52,15 +56,22 @@ class Terminal(tkinter.Frame):
         self.pack()
 
         self.com_handler = COM()
+        self.com_handler.timeout = 0.2
 
         self.max_length = lines_length
         self.autoscroll = True
+        self.verbunden = False
+
+        self.entry.bind('<Return>', self.entry_enter_bind)
+        self.entry.bind('<Up>', self.entry_up_bind)
+        self.entry.bind('<Down>', self.entry_down_bind)
+        self.verbinden_btn["command"] = self.verbinden_cmd
 
     def insert(self, line):
         self.listbox.insert(tkinter.END, line)
         if self.listbox.size() > self.max_length:
             self.listbox.delete(0, self.listbox.size() - (self.max_length+1))
-        if self.autoscroll == True:
+        if self.autoscroll_checkbox_var.get() == True:
             self.listbox.see(tkinter.END)
 
     def autoscroll_on(self):
@@ -70,12 +81,11 @@ class Terminal(tkinter.Frame):
         self.autoscroll = False
 
     def entry_enter_bind(self, para):
-        print("enter")
         if self.com_handler.isOpen() == True:
             self.com_handler.write(self.entry.get())
             self.listbox.insert(tkinter.END, self.entry.get())
             self.entry.delete(0, tkinter.END)
-            if self.autoscroll == True:
+            if self.autoscroll_checkbox_var.get() == True:
                 self.listbox.see(tkinter.END)
 
     def entry_up_bind(self, para):
@@ -87,10 +97,19 @@ class Terminal(tkinter.Frame):
     def verbinden_cmd(self):
         self.com_handler.baudrate = self.drop_down_baud_var.get()
         self.com_handler.port = "COM" + str(self.drop_down_com_var.get())
-        self.com_handler.open()
+        if self.verbunden == False:
+            self.com_handler.open()
+            self.verbunden = True
+            self.verbinden_btn["bg"] = "lime green"
+            self.verbinden_btn["text"] = "Trennen"
+        else:
+            self.com_handler.close()
+            self.verbunden = False
+            self.verbinden_btn["bg"] = "orange red"
+            self.verbinden_btn["text"] = "Verbinden"
 
-    def entry_binding_init(self):
-        self.entry.bind('<Return>', self.entry_enter_bind)
-        self.entry.bind('<Up>', self.entry_up_bind)
-        self.entry.bind('<Down>', self.entry_down_bind)
-        self.verbinden_btn["command"] = self.verbinden_cmd
+    def update(self):
+        super().update()
+        if self.verbunden == True:
+            if self.com_handler.inWaiting() > 0:
+                self.insert(self.com_handler.readline())
