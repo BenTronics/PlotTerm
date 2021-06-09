@@ -4,7 +4,7 @@ class COM(Serial):
 
     def __init__(self):
         super().__init__()
-        self.terminierung = ""
+        self.terminierung = "\r"
 
     def get_terminierung(self):
         return self.terminierung
