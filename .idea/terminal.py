@@ -53,6 +53,7 @@ class Terminal(tkinter.Frame):
         self.entry = tkinter.Entry(self.entry_org_frame, width = 63)
         self.listbox.insert("end", *[i for i in range(100)])
         self.entry.pack()
+        #gerbten frame packen
         self.pack()
 
         self.com_handler = COM()
@@ -108,8 +109,16 @@ class Terminal(tkinter.Frame):
             self.verbinden_btn["bg"] = "orange red"
             self.verbinden_btn["text"] = "Verbinden"
 
-    def update(self):
-        super().update()
-        if self.verbunden == True:
+    def u(self):
+        #super().update()
+        print("hallo")
+        if self.com_handler.isOpen():
             if self.com_handler.inWaiting() > 0:
                 self.insert(self.com_handler.readline())
+
+    def read_line(self):
+        tmp = ""
+        if self.verbunden == True:
+            if self.com_handler.inWaiting() > 0:
+                tmp = (self.com_handler.readline().decode()).strip()
+        return tmp
