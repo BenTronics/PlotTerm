@@ -25,8 +25,8 @@ class Terminal(tkinter.Frame):
         self.drop_down_baud.grid(column=1, row=0, padx=20)
         #dropdown terminierung
         self.drop_down_ter_var = tkinter.StringVar()
-        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var, width=5)
-        self.drop_down_ter["values"] = ("\\r", "\\n", "\\r\\n")
+        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var, width=6)
+        self.drop_down_ter["values"] = ("CR", "LF", "CR+LF")
         self.drop_down_ter.current(0)
         self.drop_down_ter.grid(column=2, row=0)
         #autosroll checkbox
@@ -62,6 +62,7 @@ class Terminal(tkinter.Frame):
         self.max_length = lines_length
         self.autoscroll = True
         self.verbunden = False
+        self.terminierung_lookup = {"CR":"\r", "LF":"\n", "CR+LF":"\r\n"}
 
         self.entry.bind('<Return>', self.entry_enter_bind)
         self.entry.bind('<Up>', self.entry_up_bind)
@@ -83,7 +84,7 @@ class Terminal(tkinter.Frame):
 
     def entry_enter_bind(self, para):
         if self.com_handler.isOpen() == True:
-            self.com_handler.write(self.entry.get())
+            self.com_handler.write(self.entry.get())# + self.terminierung_lookup[self.drop_down_ter_var.get()])
             self.listbox.insert(tkinter.END, self.entry.get())
             self.entry.delete(0, tkinter.END)
             if self.autoscroll_checkbox_var.get() == True:
@@ -98,6 +99,7 @@ class Terminal(tkinter.Frame):
     def verbinden_cmd(self):
         self.com_handler.baudrate = self.drop_down_baud_var.get()
         self.com_handler.port = "COM" + str(self.drop_down_com_var.get())
+        self.com_handler.set_terminierung(self.terminierung_lookup[self.drop_down_ter_var.get()])
         if self.verbunden == False:
             self.com_handler.open()
             self.verbunden = True

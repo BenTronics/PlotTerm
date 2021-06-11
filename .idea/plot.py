@@ -16,6 +16,7 @@ class Plot(tkinter.Frame):
         self.x_limit = 100
         self.y_min = -1
         self.y_max = 1
+        self.run = True
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 4), dpi=100)
@@ -27,8 +28,11 @@ class Plot(tkinter.Frame):
         self.plotcanvas.get_tk_widget().grid(column=1, row=1)
         self.ani = animation.FuncAnimation(self.fig, self.animate, interval=50, blit=False)
 
+        self.start_btn = tkinter.Button(root, text="Stop", bg="orange red", width=8, command=self.start_cmd)
+        self.start_btn.grid(column=0, row=0)
+
         #gerbten frame packen
-        self.pack()
+        self.grid()#pack()
 
     def animate(self, i):
         if len(self.y_plot) > self.x_limit:
@@ -38,4 +42,15 @@ class Plot(tkinter.Frame):
         self.ax1.set_xlim(0, self.x_limit)
 
     def insert(self, elem):
-        self.y_plot.append(elem)
+        if self.run == True:
+            self.y_plot.append(elem)
+
+    def start_cmd(self):
+        if self.start_btn["text"] == "Stop":
+            self.run = False
+            self.start_btn["text"] = "Start"
+            self.start_btn["bg"] = "lime green"
+        else:
+            self.run = True
+            self.start_btn["text"] = "Stop"
+            self.start_btn["bg"] = "orange red"
