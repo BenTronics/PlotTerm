@@ -19,7 +19,7 @@ class Plot(tkinter.Frame):
         self.run = True
 
         style.use('ggplot')
-        self.fig = plt.figure(figsize=(10, 4), dpi=100)
+        self.fig = plt.figure(figsize=(10, 5), dpi=100)
         self.ax1 = self.fig.add_subplot(1, 1, 1)
         self.ax1.set_ylim(self.y_min, self.y_max)
         self.line, = self.ax1.plot(self.x_plot, self.y_plot, 'b', marker='o', markersize=2, mec = 'r', mfc = 'r')
@@ -54,3 +54,12 @@ class Plot(tkinter.Frame):
             self.run = True
             self.start_btn["text"] = "Stop"
             self.start_btn["bg"] = "orange red"
+
+    def set_x_limit(self, limit):
+        self.x_limit = limit
+
+    def set_y_min(self, min):
+        self.y_min = min
+
+    def set_y_min(self, max):
+        self.y_max = max
