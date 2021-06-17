@@ -15,8 +15,8 @@ class Terminal(tkinter.Frame):
         self.drop_down_com_var = tkinter.IntVar()
         self.drop_down_com = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_com_var, width=5)
         self.drop_down_com.grid(column=0, row=0)
-        self.drop_down_com["values"] = (1, 2, 3, 4, 5, 6)
-        self.drop_down_com.current(0)
+        #self.drop_down_com["values"] = tuple(self.com_handler.list_ports())#(1, 2, 3, 4, 5, 6)
+        #self.drop_down_com.current(0)
         #dropdown baud
         self.drop_down_baud_var = tkinter.IntVar()
         self.drop_down_baud = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_baud_var, width=10)
@@ -63,6 +63,9 @@ class Terminal(tkinter.Frame):
         self.autoscroll = True
         self.verbunden = False
         self.terminierung_lookup = {"CR":"\r", "LF":"\n", "CR+LF":"\r\n"}
+
+        self.drop_down_com["values"] = tuple(self.com_handler.list_ports())#(1, 2, 3, 4, 5, 6)
+        #self.drop_down_com.current(0)
 
         self.entry.bind('<Return>', self.entry_enter_bind)
         self.entry.bind('<Up>', self.entry_up_bind)
@@ -124,3 +127,10 @@ class Terminal(tkinter.Frame):
             if self.com_handler.inWaiting() > 0:
                 tmp = (self.com_handler.readline().decode()).strip()
         return tmp
+
+    def update_com_ports(self):
+        self.drop_down_com["values"] = tuple(self.com_handler.list_ports())
+
+    def update(self):
+        super().update()
+        self.update_com_ports()
