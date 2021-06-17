@@ -61,5 +61,5 @@ class Plot(tkinter.Frame):
     def set_y_min(self, min):
         self.y_min = min
 
-    def set_y_min(self, max):
+    def set_y_max(self, max):
         self.y_max = max

@@ -19,6 +19,11 @@ if __name__ == '__main__':
 
     read_terminal = ""
 
+    ###### test #######
+    t = COM()
+    print(t.list_ports())
+    ##################
+
     while True:
         p.update()
         terminal.update()

@@ -1,6 +1,7 @@
-from serial import Serial
+import serial
+import serial.tools.list_ports
 
-class COM(Serial):
+class COM(serial.Serial):
 
     def __init__(self):
         super().__init__()
@@ -17,3 +18,10 @@ class COM(Serial):
 
     def write(self, msg):
         super().write((msg + self.terminierung).encode("utf-8"))
+
+    def list_ports(self):
+        ports = []
+        for port in (serial.tools.list_ports.comports()):
+            print(port)
+            ports.append((str(port)[3:]).split(" ", 1)[0])
+        return ports
