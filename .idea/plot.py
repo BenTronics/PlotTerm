@@ -37,8 +37,14 @@ class Plot(tkinter.Frame):
         self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
         self.x_limit_entry.grid(column=1, row=0)
 
+        self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.y_min_entry.grid(column=2, row=0)
+
+        self.y_max_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.y_max_entry.grid(column=3, row=0)
+
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd)
-        self.übernehmen_btn.grid(column=2, row=0)
+        self.übernehmen_btn.grid(column=4, row=0)
 
         #gerbten frame packen
         self.grid()#pack()
@@ -48,6 +54,7 @@ class Plot(tkinter.Frame):
             self.y_plot = self.y_plot[(len(self.y_plot)) - self.x_limit:]
         self.x_plot = range(len(self.y_plot))
         self.line.set_data(self.x_plot, self.y_plot)
+        self.ax1.set_ylim(self.y_min, self.y_max)
         self.ax1.set_xlim(0, self.x_limit)
 
     def insert(self, elem):
@@ -76,5 +83,13 @@ class Plot(tkinter.Frame):
     def übernehmen_cmd(self):
         try:
             self.set_x_limit(int(self.x_limit_entry.get()))
+        except:
+            pass
+        try:
+            self.set_y_max(float(self.y_max_entry.get()))
+        except:
+            pass
+        try:
+            self.set_y_min(float(self.y_min_entry.get()))
         except:
             pass
