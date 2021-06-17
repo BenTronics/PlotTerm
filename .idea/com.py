@@ -22,5 +22,5 @@ class COM(serial.Serial):
     def list_ports(self):
         ports = []
         for port in (serial.tools.list_ports.comports()):
-            ports.append((str(port)[3:]).split(" ", 1)[0])
+            ports.append(int((str(port)[3:]).split(" ", 1)[0]))
         return ports

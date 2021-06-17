@@ -22,14 +22,23 @@ class Plot(tkinter.Frame):
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
         self.ax1 = self.fig.add_subplot(1, 1, 1)
         self.ax1.set_ylim(self.y_min, self.y_max)
-        self.line, = self.ax1.plot(self.x_plot, self.y_plot, 'b', marker='o', markersize=2, mec = 'r', mfc = 'r')
+        self.line, = self.ax1.plot(self.x_plot, self.y_plot, "b")
 
         self.plotcanvas = FigureCanvasTkAgg(self.fig, self)
         self.plotcanvas.get_tk_widget().grid(column=1, row=1)
         self.ani = animation.FuncAnimation(self.fig, self.animate, interval=50, blit=False)
 
-        self.start_btn = tkinter.Button(root, text="Stop", bg="orange red", width=8, command=self.start_cmd)
+        self.bedienung_org_frame = tkinter.Frame(root)
+        self.bedienung_org_frame.grid()
+
+        self.start_btn = tkinter.Button(self.bedienung_org_frame, text="Stop", bg="orange red", width=8, command=self.start_cmd)
         self.start_btn.grid(column=0, row=0)
+
+        self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.x_limit_entry.grid(column=1, row=0)
+
+        self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd)
+        self.übernehmen_btn.grid(column=2, row=0)
 
         #gerbten frame packen
         self.grid()#pack()
@@ -63,3 +72,9 @@ class Plot(tkinter.Frame):
 
     def set_y_max(self, max):
         self.y_max = max
+
+    def übernehmen_cmd(self):
+        try:
+            self.set_x_limit(int(self.x_limit_entry.get()))
+        except:
+            pass

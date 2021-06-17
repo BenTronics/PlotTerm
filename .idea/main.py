@@ -19,18 +19,13 @@ if __name__ == '__main__':
 
     read_terminal = ""
 
-    ###### test #######
-    t = COM()
-    print(t.list_ports())
-    ##################
-
     while True:
         p.update()
         terminal.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":
             if read_terminal.find("__plot__") != -1:
-                print(read_terminal[8:])
+                #print(read_terminal[8:])
                 try:
                     p.insert(float(read_terminal[8:]))
                 except:
