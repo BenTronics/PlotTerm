@@ -32,19 +32,28 @@ class Plot(tkinter.Frame):
         self.bedienung_org_frame.grid()
 
         self.start_btn = tkinter.Button(self.bedienung_org_frame, text="Stop", bg="orange red", width=8, command=self.start_cmd)
-        self.start_btn.grid(column=0, row=0)
+        self.start_btn.grid(column=0, row=1)
 
         self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.x_limit_entry.grid(column=1, row=0)
+        self.x_limit_entry.grid(column=1, row=1)
 
         self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_min_entry.grid(column=2, row=0)
+        self.y_min_entry.grid(column=2, row=1)
 
         self.y_max_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_max_entry.grid(column=3, row=0)
+        self.y_max_entry.grid(column=3, row=1)
+
+        self.x_limit_label = tkinter.Label(self.bedienung_org_frame, text="X Limit", padx=20)
+        self.x_limit_label.grid(column=1, row=0)
+
+        self.y_min_label = tkinter.Label(self.bedienung_org_frame, text="Y Min", padx=20)
+        self.y_min_label.grid(column=2, row=0)
+
+        self.y_max_label = tkinter.Label(self.bedienung_org_frame, text="Y Max", padx=20)
+        self.y_max_label.grid(column=3, row=0)
 
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd)
-        self.übernehmen_btn.grid(column=4, row=0)
+        self.übernehmen_btn.grid(column=4, row=1)
 
         #gerbten frame packen
         self.grid()#pack()
