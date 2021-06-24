@@ -64,10 +64,10 @@ class Plot(tkinter.Frame):
         #self.line.set_data(self.x_plot, self.y_plot)
         #self.ax1.set_ylim(self.y_min, self.y_max)
         #self.ax1.set_xlim(0, self.x_limit)
-        self.ax1.clear()
-        plt.plot(self.y_plot)
-        plt.draw()
-        plt.pause(0.01)
+        if self.run == True:
+            self.ax1.clear()
+            plt.plot(self.y_plot, "b")
+            plt.pause(0.01)
 
     def insert(self, elem):
         if self.run == True:

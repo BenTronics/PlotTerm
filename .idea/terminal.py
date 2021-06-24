@@ -125,7 +125,7 @@ class Terminal(tkinter.Frame):
         tmp = ""
         if self.com_handler.isOpen() == True:
             if self.com_handler.inWaiting() > 0:
-                tmp = (self.com_handler.readline().decode()).strip()
+                tmp = (self.com_handler.readline().decode("iso-8859-1")).strip()
         return tmp
 
     def update_com_ports(self):

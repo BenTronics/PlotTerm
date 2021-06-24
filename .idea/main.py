@@ -20,12 +20,12 @@ if __name__ == '__main__':
     read_terminal = ""
 
     while True:
-        #p.update()
-        #p.animate(1)
+        p.update()
+        p.animate(1)
         terminal.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":
-            if read_terminal.find("__plot__") != -1:
+            if read_terminal[:8] == "__plot__":
                 #print(read_terminal[8:])
                 try:
                     p.insert(float(read_terminal[8:]))
