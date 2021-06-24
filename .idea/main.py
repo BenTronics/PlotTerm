@@ -15,20 +15,19 @@ if __name__ == '__main__':
 
     terminal = Terminal(R_frame,50)
 
-    p = Plot(L_frame)
+    live_plot = Plot(L_frame)
 
     read_terminal = ""
 
     while True:
-        p.update()
-        p.animate(1)
+        live_plot.update()
         terminal.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":
             if read_terminal[:8] == "__plot__":
                 #print(read_terminal[8:])
                 try:
-                    p.insert(float(read_terminal[8:]))
+                    live_plot.insert(float(read_terminal[8:]))
                 except:
                     pass
             else:
