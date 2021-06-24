@@ -1,9 +1,7 @@
 import tkinter
 from terminal import Terminal
 from matplotlib import pyplot as plt
-import matplotlib.animation as animation
 from matplotlib import style
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class Plot(tkinter.Frame):
 

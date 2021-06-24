@@ -17,7 +17,7 @@ class COM(serial.Serial):
         self.terminierung = zeichen
 
     def write(self, msg):
-        super().write((msg + self.terminierung).encode("utf-8"))
+        super().write((msg + self.terminierung).encode("iso-8859-1"))
 
     def list_ports(self):
         ports = []
