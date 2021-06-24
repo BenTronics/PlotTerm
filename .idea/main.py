@@ -20,7 +20,8 @@ if __name__ == '__main__':
     read_terminal = ""
 
     while True:
-        p.update()
+        #p.update()
+        #p.animate(1)
         terminal.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":

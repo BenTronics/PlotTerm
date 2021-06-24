@@ -23,9 +23,9 @@ class Plot(tkinter.Frame):
         self.ax1.set_ylim(self.y_min, self.y_max)
         self.line, = self.ax1.plot(self.x_plot, self.y_plot, "b")
 
-        self.plotcanvas = FigureCanvasTkAgg(self.fig, self)
-        self.plotcanvas.get_tk_widget().grid(column=1, row=1)
-        self.ani = animation.FuncAnimation(self.fig, self.animate, interval=50, blit=False)
+        #self.plotcanvas = FigureCanvasTkAgg(self.fig, self)
+        #self.plotcanvas.get_tk_widget().grid(column=1, row=1)
+        #self.ani = animation.FuncAnimation(self.fig, self.animate, interval=50, blit=False)
 
         self.bedienung_org_frame = tkinter.Frame(root)
         self.bedienung_org_frame.grid()
@@ -61,9 +61,13 @@ class Plot(tkinter.Frame):
         if len(self.y_plot) > self.x_limit:
             self.y_plot = self.y_plot[(len(self.y_plot)) - self.x_limit:]
         self.x_plot = range(len(self.y_plot))
-        self.line.set_data(self.x_plot, self.y_plot)
-        self.ax1.set_ylim(self.y_min, self.y_max)
-        self.ax1.set_xlim(0, self.x_limit)
+        #self.line.set_data(self.x_plot, self.y_plot)
+        #self.ax1.set_ylim(self.y_min, self.y_max)
+        #self.ax1.set_xlim(0, self.x_limit)
+        self.ax1.clear()
+        plt.plot(self.y_plot)
+        plt.draw()
+        plt.pause(0.01)
 
     def insert(self, elem):
         if self.run == True:
