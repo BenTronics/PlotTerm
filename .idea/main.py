@@ -8,7 +8,7 @@ from plot import Plot
 if __name__ == '__main__':
     fenster = Tk()
 
-    L_frame = Frame(fenster)
+    L_frame = LabelFrame(fenster, text="Plot Kontrollfenster")
     L_frame.grid(column=0,row=0)
     R_frame = LabelFrame(fenster, text="Terminal")
     R_frame.grid(column=1, row=0)
@@ -25,7 +25,6 @@ if __name__ == '__main__':
         read_terminal = terminal.read_line()
         if read_terminal != "":
             if read_terminal[:8] == "__plot__":
-                #print(read_terminal[8:])
                 try:
                     live_plot.insert(float(read_terminal[8:]))
                 except:
