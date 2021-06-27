@@ -49,6 +49,19 @@ class Plot(tkinter.Frame):
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd, width=40, pady=20)
         self.übernehmen_btn.grid(column=0, row=4, columnspan=3)
 
+        self.scroll_org_frame = tkinter.Frame(root)
+        self.scroll_org_frame.grid(column=0, row=5, columnspan=3)
+        self.entry_org_frame = tkinter.Frame(self.scroll_org_frame)
+        self.entry_org_frame.pack(side="bottom", pady=3)
+        self.scroll_y = tkinter.Scrollbar(self.scroll_org_frame)
+        self.scroll_y.pack(fill="y", side="right")
+        self.listbox = tkinter.Listbox(self.scroll_org_frame, height=21, width=45)
+        self.listbox.pack(side="top")
+        self.scroll_y["command"] = self.listbox.yview
+        self.listbox["yscrollcommand"] = self.scroll_y.set
+        for i in range(10000):
+            self.listbox.insert(tkinter.END, str(i))
+
         #gerbten frame packen
         self.grid()#pack()
 
