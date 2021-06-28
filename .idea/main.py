@@ -20,8 +20,8 @@ if __name__ == '__main__':
     read_terminal = ""
 
     while True:
-        live_plot.update()
         terminal.update()
+        live_plot.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":
             if read_terminal[:8] == "__plot__":

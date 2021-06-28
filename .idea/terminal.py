@@ -51,7 +51,7 @@ class Terminal(tkinter.Frame):
         self.listbox["xscrollcommand"] = self.scroll_x.set
         #entry
         self.entry = tkinter.Entry(self.entry_org_frame, width = 63)
-        self.listbox.insert("end", *[i for i in range(100)])
+        #self.listbox.insert("end", *[i for i in range(100)])
         self.entry.pack()
         #gerbten frame packen
         self.pack()

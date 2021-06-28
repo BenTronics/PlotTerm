@@ -59,8 +59,6 @@ class Plot(tkinter.Frame):
         self.listbox.pack(side="top")
         self.scroll_y["command"] = self.listbox.yview
         self.listbox["yscrollcommand"] = self.scroll_y.set
-        for i in range(10000):
-            self.listbox.insert(tkinter.END, str(i))
 
         #gerbten frame packen
         self.grid()#pack()
@@ -80,6 +78,11 @@ class Plot(tkinter.Frame):
     def insert(self, elem):
         if self.run == True:
             self.y_plot.append(elem)
+            self.listbox.insert(tkinter.END, str(elem))
+            self.listbox.see(tkinter.END)
+            if len(self.y_plot) > self.x_limit:
+                self.listbox.delete(0, self.listbox.size() - (self.max_length+1))
+
 
     def start_cmd(self):
         if self.start_btn["text"] == "Stop":
