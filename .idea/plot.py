@@ -60,6 +60,10 @@ class Plot(tkinter.Frame):
         self.scroll_y["command"] = self.listbox.yview
         self.listbox["yscrollcommand"] = self.scroll_y.set
 
+        self.x_limit_entry.bind('<Return>', self.x_limit_enter_bind)
+        self.y_min_entry.bind('<Return>', self.y_min_enter_bind)
+        self.y_max_entry.bind('<Return>', self.y_max_enter_bind)
+
         #gerbten frame packen
         self.grid()#pack()
 
@@ -112,6 +116,24 @@ class Plot(tkinter.Frame):
             self.set_y_max(float(self.y_max_entry.get()))
         except:
             pass
+        try:
+            self.set_y_min(float(self.y_min_entry.get()))
+        except:
+            pass
+
+    def x_limit_enter_bind(self, para):
+        try:
+            self.set_x_limit(int(self.x_limit_entry.get()))
+        except:
+            pass
+
+    def y_max_enter_bind(self, para):
+        try:
+            self.set_y_max(float(self.y_max_entry.get()))
+        except:
+            pass
+
+    def y_min_enter_bind(self, para):
         try:
             self.set_y_min(float(self.y_min_entry.get()))
         except:
