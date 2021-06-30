@@ -87,13 +87,14 @@ class Terminal(tkinter.Frame):
 
     def entry_enter_bind(self, para):
         if self.com_handler.isOpen() == True:
-            self.com_handler.write(self.entry.get())# + self.terminierung_lookup[self.drop_down_ter_var.get()])
-            self.listbox.insert(tkinter.END, self.entry.get())
+            self.com_handler.write(self.entry.get())
+            self.listbox.insert(tkinter.END, "Tx> " + self.entry.get())
             self.entry.delete(0, tkinter.END)
             if self.autoscroll_checkbox_var.get() == True:
                 self.listbox.see(tkinter.END)
 
     def entry_up_bind(self, para):
+        #TODO verlauf implementieren
         print("up")
 
     def entry_down_bind(self, para):

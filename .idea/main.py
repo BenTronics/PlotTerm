@@ -30,5 +30,5 @@ if __name__ == '__main__':
                 except:
                     pass
             else:
-                terminal.insert(read_terminal)
+                terminal.insert("Rx> " + read_terminal)
             read_terminal = ""
