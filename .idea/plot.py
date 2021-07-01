@@ -14,6 +14,7 @@ class Plot(tkinter.Frame):
         self.y_min = -1
         self.y_max = 1
         self.run = True
+        self.y_autoscale = False
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
@@ -30,12 +31,15 @@ class Plot(tkinter.Frame):
 
         self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
         self.x_limit_entry.grid(column=0, row=3)
+        self.x_limit_entry.insert(0, self.x_limit)
 
         self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
         self.y_min_entry.grid(column=1, row=3)
+        self.y_min_entry.insert(0, self.y_min)
 
         self.y_max_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
         self.y_max_entry.grid(column=2, row=3)
+        self.y_max_entry.insert(0, self.y_max)
 
         self.x_limit_label = tkinter.Label(self.bedienung_org_frame, text="X Limit", padx=10, pady=20)
         self.x_limit_label.grid(column=0, row=2)
@@ -76,7 +80,11 @@ class Plot(tkinter.Frame):
         if self.run == True:
             self.ax1.clear()
             plt.plot(self.y_plot, "b")
-            plt.ylim(self.y_min, self.y_max)
+            if self.y_autoscale == False:
+                plt.ylim(self.y_min, self.y_max)
+            else:
+                if len(self.y_plot) > 1:
+                    plt.ylim(min(self.y_plot), max(self.y_plot))
             plt.pause(0.01)
 
     def insert(self, elem):
