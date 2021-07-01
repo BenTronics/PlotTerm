@@ -66,8 +66,17 @@ class Plot(tkinter.Frame):
         self.listbox["yscrollcommand"] = self.scroll_y.set
 
         self.x_limit_entry.bind('<Return>', self.x_limit_enter_bind)
+        self.x_limit_entry.bind('<Control-Right>', self.x_limit_rArrow_bind)
+        self.x_limit_entry.bind('<MouseWheel>', self.x_limit_whell_bind)
+
         self.y_min_entry.bind('<Return>', self.y_min_enter_bind)
+        self.y_min_entry.bind('<Control-Left>', self.y_min_lArrow_bind)
+        self.y_min_entry.bind('<Control-Right>', self.y_min_rArrow_bind)
+        self.y_min_entry.bind('<MouseWheel>', self.y_min_whell_bind)
+
         self.y_max_entry.bind('<Return>', self.y_max_enter_bind)
+        self.y_max_entry.bind('<Control-Left>', self.y_max_lArrow_bind)
+        self.y_max_entry.bind('<MouseWheel>', self.y_max_whell_bind)
 
         #gerbten frame packen
         self.grid()#pack()
@@ -158,3 +167,41 @@ class Plot(tkinter.Frame):
             self.set_y_min(float(self.y_min_entry.get()))
         except:
             pass
+
+    def x_limit_rArrow_bind(self, para):
+        self.y_min_entry.icursor(0)
+
+    def y_min_rArrow_bind(self, para):
+        self.y_max_entry.icursor(0)
+
+    def y_min_lArrow_bind(self, para):
+        self.x_limit_entry.icursor(0)
+
+    def y_max_lArrow_bind(self, para):
+        self.y_min_entry.icursor(0)
+
+    def x_limit_whell_bind(self, para):
+        self.x_limit_entry.delete(0, tkinter.END)
+        if para.delta > 0:
+            self.x_limit += 1
+        else:
+            self.x_limit -= 1
+        self.x_limit_entry.insert(0, self.x_limit)
+
+    def y_min_whell_bind(self, para):
+        self.y_min_entry.delete(0, tkinter.END)
+        if para.delta > 0:
+            if (self.y_min - ((self.y_min) / 10)) < self.y_max:
+                self.y_min += (self.y_min) / 10
+        else:
+            self.y_min -= (self.y_min) / 10
+        self.y_min_entry.insert(0, self.y_min)
+
+    def y_max_whell_bind(self, para):
+        self.y_max_entry.delete(0, tkinter.END)
+        if para.delta > 0:
+            self.y_max += (self.y_max) / 10
+        else:
+            if (self.y_max - ((self.y_max) / 10)) > self.y_min:
+                self.y_max -= (self.y_max) / 10
+        self.y_max_entry.insert(0, self.y_max)
