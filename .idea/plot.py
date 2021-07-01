@@ -78,6 +78,7 @@ class Plot(tkinter.Frame):
             self.y_plot = self.y_plot[(len(self.y_plot)) - self.x_limit:]
         self.x_plot = range(len(self.y_plot))
         self.ax1.set_ylim([self.y_min, self.y_max])
+        self.listbox.delete(0, self.listbox.size() - (self.x_limit + 1))
         if self.run == True:
             self.ax1.clear()
             plt.plot(self.y_plot, "b")
@@ -92,11 +93,11 @@ class Plot(tkinter.Frame):
                 plt.draw()
             self.marker_pos = int(self.listbox.index(tkinter.ANCHOR))
             if self.marker_pos > len(self.y_plot)-1:
-                self.marker_pos -= 1
+                self.marker_pos = 0
             self.ax1.clear()
             plt.plot(self.x_plot[:self.marker_pos+1], self.y_plot[:self.marker_pos+1], "b")
-            plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=6, markeredgecolor="r")
             plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b")
+            plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=6, markeredgecolor="r", markerfacecolor="r")
 
     def insert(self, elem):
         if self.run == True:
