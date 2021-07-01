@@ -15,6 +15,7 @@ class Plot(tkinter.Frame):
         self.y_max = 1
         self.run = True
         self.y_autoscale = False
+        self.marker_pos = 1
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
@@ -86,6 +87,16 @@ class Plot(tkinter.Frame):
                 if len(self.y_plot) > 1:
                     plt.ylim(min(self.y_plot), max(self.y_plot))
             plt.pause(0.01)
+        elif self.run == False and len(self.y_plot) > 1:
+            if self.marker_pos != int(self.listbox.index(tkinter.ANCHOR)) and self.listbox.index(tkinter.ANCHOR) < len(self.y_plot):
+                plt.draw()
+            self.marker_pos = int(self.listbox.index(tkinter.ANCHOR))
+            if self.marker_pos > len(self.y_plot)-1:
+                self.marker_pos -= 1
+            self.ax1.clear()
+            plt.plot(self.x_plot[:self.marker_pos+1], self.y_plot[:self.marker_pos+1], "b")
+            plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=6, markeredgecolor="r")
+            plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b")
 
     def insert(self, elem):
         if self.run == True:
