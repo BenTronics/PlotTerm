@@ -1,6 +1,7 @@
 import tkinter
 from tkinter import ttk
 from com import COM
+from befehls_verlauf import BefehlsVerlauf
 
 class Terminal(tkinter.Frame):
     def __init__(self, root, lines_length=100):
@@ -59,6 +60,8 @@ class Terminal(tkinter.Frame):
         self.com_handler = COM()
         self.com_handler.timeout = 0.2
 
+        self.verlauf = BefehlsVerlauf(5)
+
         self.max_length = lines_length
         self.autoscroll = True
         self.verbunden = False
@@ -89,16 +92,21 @@ class Terminal(tkinter.Frame):
         if self.com_handler.isOpen() == True:
             self.com_handler.write(self.entry.get())
             self.listbox.insert(tkinter.END, "Tx> " + self.entry.get())
+            self.verlauf.append(self.entry.get())
             self.entry.delete(0, tkinter.END)
             if self.autoscroll_checkbox_var.get() == True:
                 self.listbox.see(tkinter.END)
 
+
     def entry_up_bind(self, para):
-        #TODO verlauf implementieren
-        print("up")
+        self.entry.delete(0, tkinter.END)
+        self.entry.insert(0, self.verlauf.read())
+        self.verlauf.pointer_up()
 
     def entry_down_bind(self, para):
-        print("down")
+        self.entry.delete(0, tkinter.END)
+        self.entry.insert(0, self.verlauf.read())
+        self.verlauf.pointer_down()
 
     def verbinden_cmd(self):
         self.com_handler.baudrate = self.drop_down_baud_var.get()
@@ -114,13 +122,6 @@ class Terminal(tkinter.Frame):
             self.verbunden = False
             self.verbinden_btn["bg"] = "orange red"
             self.verbinden_btn["text"] = "Verbinden"
-
-    def u(self):
-        #super().update()
-        print("hallo")
-        if self.com_handler.isOpen():
-            if self.com_handler.inWaiting() > 0:
-                self.insert(self.com_handler.readline())
 
     def read_line(self):
         tmp = ""
