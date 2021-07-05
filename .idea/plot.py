@@ -2,6 +2,8 @@ import tkinter
 from terminal import Terminal
 from matplotlib import pyplot as plt
 from matplotlib import style
+import csv
+from tkinter.filedialog import asksaveasfilename
 
 class Plot(tkinter.Frame):
 
@@ -59,7 +61,7 @@ class Plot(tkinter.Frame):
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd, pady=4)
         self.übernehmen_btn.grid(column=3, row=4)
 
-        self.csv_btn = tkinter.Button(self.bedienung_org_frame, text="Export *.csv", command=self.übernehmen_cmd, pady=4, width=33)
+        self.csv_btn = tkinter.Button(self.bedienung_org_frame, text="Export *.csv", command=self.save_csv, pady=4, width=33)
         self.csv_btn.grid(column=0, row=5, columnspan=4)
 
         self.y_autoscale_checkbox = tkinter.Checkbutton(self.bedienung_org_frame, variable=self.y_autoscale, text="Y Autoscale", pady=5)
@@ -223,3 +225,18 @@ class Plot(tkinter.Frame):
     def clear_cmd(self):
         self.y_plot = []
         self.x_plot = []
+
+    def save_csv(self):
+        if self.run == True:
+            return
+        pfad = asksaveasfilename(defaultextension=".csv",filetypes=[("CSV","*.csv")])
+        if pfad == "":
+            return
+        try:
+            f = open(pfad, "w")
+            f.close()
+        except:
+            return
+        with open(pfad, "w") as csv_file:
+            for i, v in enumerate(self.y_plot):
+                csv_file.write(str(self.x_plot[i]) + ";" + str(self.y_plot[i]) + "\n")
