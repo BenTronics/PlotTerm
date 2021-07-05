@@ -14,7 +14,9 @@ class Plot(tkinter.Frame):
         self.y_min = -1
         self.y_max = 1
         self.run = True
-        self.y_autoscale = False
+        #self.y_autoscale = False
+        self.y_autoscale = tkinter.IntVar()
+        self.y_autoscale.set(0)
         self.marker_pos = 1
 
         style.use('ggplot')
@@ -27,35 +29,41 @@ class Plot(tkinter.Frame):
         self.bedienung_org_frame = tkinter.Frame(root)
         self.bedienung_org_frame.grid()
 
-        self.start_btn = tkinter.Button(self.bedienung_org_frame, text="Stop", bg="orange red", command=self.start_cmd, width=40, pady=20)
-        self.start_btn.grid(column=0, row=1, columnspan=3)
+        self.start_btn = tkinter.Button(self.bedienung_org_frame, text="Stop", bg="orange red", command=self.start_cmd, width=5, padx=4)
+        self.start_btn.grid(column=0, row=1, columnspan=2)
+
+        self.clear_btn = tkinter.Button(self.bedienung_org_frame, text="Clear", command=self.clear_cmd, width=5, padx=4)
+        self.clear_btn.grid(column=1, row=1, columnspan=2)
 
         self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.x_limit_entry.grid(column=0, row=3)
+        self.x_limit_entry.grid(column=0, row=4)
         self.x_limit_entry.insert(0, self.x_limit)
 
         self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_min_entry.grid(column=1, row=3)
+        self.y_min_entry.grid(column=1, row=4)
         self.y_min_entry.insert(0, self.y_min)
 
         self.y_max_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_max_entry.grid(column=2, row=3)
+        self.y_max_entry.grid(column=2, row=4)
         self.y_max_entry.insert(0, self.y_max)
 
         self.x_limit_label = tkinter.Label(self.bedienung_org_frame, text="X Limit", padx=10, pady=20)
-        self.x_limit_label.grid(column=0, row=2)
+        self.x_limit_label.grid(column=0, row=3)
 
         self.y_min_label = tkinter.Label(self.bedienung_org_frame, text="Y Min", padx=10, pady=20)
-        self.y_min_label.grid(column=1, row=2)
+        self.y_min_label.grid(column=1, row=3)
 
         self.y_max_label = tkinter.Label(self.bedienung_org_frame, text="Y Max", padx=10, pady=20)
-        self.y_max_label.grid(column=2, row=2)
+        self.y_max_label.grid(column=2, row=3)
 
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd, width=40, pady=20)
-        self.übernehmen_btn.grid(column=0, row=4, columnspan=3)
+        self.übernehmen_btn.grid(column=0, row=5, columnspan=3)
+
+        self.y_autoscale_checkbox = tkinter.Checkbutton(self.bedienung_org_frame, variable=self.y_autoscale)
+        self.y_autoscale_checkbox.grid(column=0, row=2)
 
         self.scroll_org_frame = tkinter.Frame(root)
-        self.scroll_org_frame.grid(column=0, row=5, columnspan=3)
+        self.scroll_org_frame.grid(column=0, row=6, columnspan=3)
         self.entry_org_frame = tkinter.Frame(self.scroll_org_frame)
         self.entry_org_frame.pack(side="bottom", pady=3)
         self.scroll_y = tkinter.Scrollbar(self.scroll_org_frame)
@@ -91,11 +99,15 @@ class Plot(tkinter.Frame):
         if self.run == True:
             self.ax1.clear()
             plt.plot(self.y_plot, "b")
-            if self.y_autoscale == False:
+            if self.y_autoscale.get() == False:
                 plt.ylim(self.y_min, self.y_max)
             else:
                 if len(self.y_plot) > 1:
                     plt.ylim(min(self.y_plot), max(self.y_plot))
+                    self.y_min_entry.delete(0, tkinter.END)
+                    self.y_min_entry.insert(0, str(min(self.y_plot)))
+                    self.y_max_entry.delete(0, tkinter.END)
+                    self.y_max_entry.insert(0, str(max(self.y_plot)))
             plt.pause(0.01)
         elif self.run == False and len(self.y_plot) > 1:
             if self.marker_pos != int(self.listbox.index(tkinter.ANCHOR)) and self.listbox.index(tkinter.ANCHOR) < len(self.y_plot):
@@ -115,7 +127,6 @@ class Plot(tkinter.Frame):
             self.listbox.see(tkinter.END)
             if len(self.y_plot) > self.x_limit:
                 self.listbox.delete(0, self.listbox.size() - (self.max_length+1))
-
 
     def start_cmd(self):
         if self.start_btn["text"] == "Stop":
@@ -205,3 +216,7 @@ class Plot(tkinter.Frame):
             if (self.y_max - ((self.y_max) / 10)) > self.y_min:
                 self.y_max -= (self.y_max) / 10
         self.y_max_entry.insert(0, self.y_max)
+
+    def clear_cmd(self):
+        self.y_plot = []
+        self.x_plot = []
