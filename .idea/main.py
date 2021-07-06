@@ -24,9 +24,10 @@ if __name__ == '__main__':
         live_plot.update()
         read_terminal = terminal.read_line()
         if read_terminal != "":
-            if read_terminal[:8] == "__plot__":
+            #print(read_terminal)
+            if read_terminal[:8] == "__plot__" and read_terminal[-1] == ";":
                 try:
-                    live_plot.insert(float(read_terminal[8:]))
+                    live_plot.insert(float(read_terminal[8:-1]))
                 except:
                     pass
             else:
