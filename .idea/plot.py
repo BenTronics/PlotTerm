@@ -62,6 +62,9 @@ class Plot(tkinter.Frame):
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd, pady=4)
         self.übernehmen_btn.grid(column=3, row=4)
 
+        self.auto_set_btn = tkinter.Button(self.bedienung_org_frame, text="Auto Set", command=self.auto_set)
+        self.auto_set_btn.grid(column=2, row=2)
+
         self.csv_btn = tkinter.Button(self.bedienung_org_frame, text="Export *.csv", command=self.save_csv, pady=4, width=33)
         self.csv_btn.grid(column=0, row=5, columnspan=4)
 
@@ -97,6 +100,8 @@ class Plot(tkinter.Frame):
 
 
     def update(self):
+        y_scale_min = -10.0
+        y_scale_max = 10
         if len(self.y_plot) > self.x_limit:
             self.y_plot = self.y_plot[(len(self.y_plot)) - self.x_limit:]
         self.x_plot = range(len(self.y_plot))
@@ -109,11 +114,15 @@ class Plot(tkinter.Frame):
                 plt.ylim(self.y_min, self.y_max)
             else:
                 if len(self.y_plot) > 1:
-                    plt.ylim(min(self.y_plot), max(self.y_plot))
+                    y_scale_min = min(self.y_plot) - 0.1
+                    y_scale_max = max(self.y_plot) +0.1
+                    plt.ylim(y_scale_min, y_scale_max)
                     self.y_min_entry.delete(0, tkinter.END)
-                    self.y_min_entry.insert(0, str(min(self.y_plot)))
+                    self.y_min_entry.insert(0, str(y_scale_min))
                     self.y_max_entry.delete(0, tkinter.END)
-                    self.y_max_entry.insert(0, str(max(self.y_plot)))
+                    self.y_max_entry.insert(0, str(y_scale_max))
+                    self.set_y_min(y_scale_min)
+                    self.set_y_max(y_scale_max)
             plt.pause(0.01)
         elif self.run == False and len(self.y_plot) > 1:
             if self.marker_pos != int(self.listbox.index(tkinter.ANCHOR)) and self.listbox.index(tkinter.ANCHOR) < len(self.y_plot):
@@ -241,3 +250,10 @@ class Plot(tkinter.Frame):
         with open(pfad, "w") as csv_file:
             for i, v in enumerate(self.y_plot):
                 csv_file.write(str(self.x_plot[i]) + ";" + str(self.y_plot[i]) + "\n")
+
+    def auto_set(self):
+        y_scale_min = min(self.y_plot) - 0.1
+        y_scale_max = max(self.y_plot) + 0.1
+        plt.ylim(y_scale_min, y_scale_max)
+        self.set_y_min(y_scale_min)
+        self.set_y_max(y_scale_max)

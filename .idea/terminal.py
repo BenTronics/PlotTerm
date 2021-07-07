@@ -13,20 +13,20 @@ class Terminal(tkinter.Frame):
         self.verbinden_btn = tkinter.Button(self.bedienung_org_frame, text = "Verbinden", width = 12, pady = 2, bg="orange red")
         self.verbinden_btn.grid(column=4, row=0, padx=10)
         #dropdown com
-        self.drop_down_com_var = tkinter.IntVar()
-        self.drop_down_com = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_com_var, width=5)
+        self.drop_down_com_var = tkinter.StringVar()
+        self.drop_down_com = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_com_var, state="readonly", width=5)
         self.drop_down_com.grid(column=0, row=0)
         #self.drop_down_com["values"] = (1, 2, 3, 4, 5, 6)
         #self.drop_down_com.current(0)
         #dropdown baud
         self.drop_down_baud_var = tkinter.IntVar()
-        self.drop_down_baud = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_baud_var, width=10)
+        self.drop_down_baud = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_baud_var, state="readonly", width=10)
         self.drop_down_baud["values"] = (110, 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 38400, 57600, 115200, 128000, 256000)
         self.drop_down_baud.current(11)
         self.drop_down_baud.grid(column=1, row=0, padx=20)
         #dropdown terminierung
         self.drop_down_ter_var = tkinter.StringVar()
-        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var, width=6)
+        self.drop_down_ter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_ter_var, state="readonly", width=6)
         self.drop_down_ter["values"] = ("CR", "LF", "CR+LF")
         self.drop_down_ter.current(0)
         self.drop_down_ter.grid(column=2, row=0)
@@ -60,14 +60,14 @@ class Terminal(tkinter.Frame):
         self.com_handler = COM()
         self.com_handler.timeout = 0.2
 
-        self.verlauf = BefehlsVerlauf(5)
+        self.verlauf = BefehlsVerlauf(30)
 
         self.max_length = lines_length
         self.autoscroll = True
         self.verbunden = False
         self.terminierung_lookup = {"CR":"\r", "LF":"\n", "CR+LF":"\r\n"}
 
-        self.drop_down_com["values"] = tuple(self.com_handler.list_ports())#(1, 2, 3, 4, 5, 6)
+        self.drop_down_com["values"] = tuple(map(str, self.com_handler.list_ports()))
         #self.drop_down_com.current(0)
 
         self.entry.bind('<Return>', self.entry_enter_bind)
