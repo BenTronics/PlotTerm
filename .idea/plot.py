@@ -23,6 +23,7 @@ class Plot(tkinter.Frame):
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
+        self.fig.canvas.set_window_title("Live Plot")
         self.ax1 = self.fig.add_subplot(1, 1, 1)
         self.ax1.set_ylim(self.y_min, self.y_max)
         self.line, = self.ax1.plot(self.x_plot, self.y_plot, "b")
