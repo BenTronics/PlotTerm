@@ -4,6 +4,7 @@ from matplotlib import pyplot as plt
 from matplotlib import style
 import csv
 from tkinter.filedialog import asksaveasfilename
+from mittel import Mittel
 
 class Plot(tkinter.Frame):
 
@@ -20,6 +21,8 @@ class Plot(tkinter.Frame):
         self.y_autoscale = tkinter.IntVar()
         self.y_autoscale.set(0)
         self.marker_pos = 1
+
+        self.mittelwert = Mittel(10)
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
@@ -110,6 +113,7 @@ class Plot(tkinter.Frame):
         if self.run == True:
             self.ax1.clear()
             plt.plot(self.y_plot, "b")
+            plt.plot(self.mittelwert.filtern(self.y_plot), "g:")
             if self.y_autoscale.get() == False:
                 plt.ylim(self.y_min, self.y_max)
             else:
