@@ -5,7 +5,9 @@ from matplotlib import style
 import csv
 from tkinter.filedialog import asksaveasfilename
 from mittel import Mittel
+from median import Median
 
+#todo: checkbox oder so für mittelwert anzeigen bzw. nicht anzeigen
 class Plot(tkinter.Frame):
 
     def __init__(self, root):
@@ -22,7 +24,8 @@ class Plot(tkinter.Frame):
         self.y_autoscale.set(0)
         self.marker_pos = 1
 
-        self.mittelwert = Mittel(10)
+        self.mittelwert = Mittel(30)
+        self.median = Median(31)
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
@@ -114,6 +117,7 @@ class Plot(tkinter.Frame):
             self.ax1.clear()
             plt.plot(self.y_plot, "b")
             plt.plot(self.mittelwert.filtern(self.y_plot), "g:")
+            plt.plot(self.median.filtern(self.y_plot), "r--")
             if self.y_autoscale.get() == False:
                 plt.ylim(self.y_min, self.y_max)
             else:
