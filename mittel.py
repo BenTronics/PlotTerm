@@ -22,3 +22,6 @@ class Mittel():
                 break
         #print(self.gefiltert)
         return self.gefiltert
+
+    def set_fenster_breite(self, breite):
+        self.fenster_breite = breite

@@ -84,8 +84,8 @@ class Plot(tkinter.Frame):
         self.drop_down_filter.current(0)
         self.drop_down_filter.grid(column=0, row=3, columnspan=2)
 
-        self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_min_entry.grid(column=2, row=3)
+        self.fenster_breite_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.fenster_breite_entry.grid(column=2, row=3)
 
         self.scroll_org_frame = tkinter.Frame(root)
         self.scroll_org_frame.grid(column=0, row=6, columnspan=3)
@@ -111,6 +111,8 @@ class Plot(tkinter.Frame):
         self.y_max_entry.bind('<Control-Left>', self.y_max_lArrow_bind)
         self.y_max_entry.bind('<MouseWheel>', self.y_max_whell_bind)
 
+        self.fenster_breite_entry.bind('<Return>', self.fenster_breite_bind)
+
         #gerbten frame packen
         self.grid()#pack()
 
@@ -125,15 +127,20 @@ class Plot(tkinter.Frame):
         self.listbox.delete(0, self.listbox.size() - (self.x_limit + 1))
         if self.run == True:
             self.ax1.clear()
-            plt.plot(self.y_plot, "b")
-            plt.plot(self.mittelwert.filtern(self.y_plot), "g:")
-            plt.plot(self.median.filtern(self.y_plot), "r--")
+            if self.drop_down_filter_var.get() == "kein Filter":
+                plt.plot(self.y_plot, "b")
+            elif self.drop_down_filter_var.get() == "Mittel":
+                plt.plot(self.y_plot, "b--")
+                plt.plot(self.mittelwert.filtern(self.y_plot), "g")
+            elif self.drop_down_filter_var.get() == "Median":
+                plt.plot(self.y_plot, "b--")
+                plt.plot(self.median.filtern(self.y_plot), "g")
             if self.y_autoscale.get() == False:
                 plt.ylim(self.y_min, self.y_max)
             else:
                 if len(self.y_plot) > 1:
                     y_scale_min = min(self.y_plot) - 0.1
-                    y_scale_max = max(self.y_plot) +0.1
+                    y_scale_max = max(self.y_plot) + 0.1
                     plt.ylim(y_scale_min, y_scale_max)
                     self.y_min_entry.delete(0, tkinter.END)
                     self.y_min_entry.insert(0, str(y_scale_min))
@@ -149,9 +156,21 @@ class Plot(tkinter.Frame):
             if self.marker_pos > len(self.y_plot)-1:
                 self.marker_pos = 0
             self.ax1.clear()
-            plt.plot(self.x_plot[:self.marker_pos+1], self.y_plot[:self.marker_pos+1], "b")
-            plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b")
-            plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=6, markeredgecolor="r", markerfacecolor="r")
+            if self.drop_down_filter_var.get() == "kein Filter":
+                plt.plot(self.x_plot[:self.marker_pos+1], self.y_plot[:self.marker_pos+1], "b")
+                plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b")
+                plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=5, markeredgecolor="r", markerfacecolor="r")
+            elif self.drop_down_filter_var.get() == "Mittel":
+                plt.plot(self.x_plot[:self.marker_pos + 1], self.y_plot[:self.marker_pos + 1], "b--")
+                plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b--")
+                plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=5, markeredgecolor="r", markerfacecolor="r")
+                plt.plot(self.mittelwert.filtern(self.y_plot), "g")
+            elif self.drop_down_filter_var.get() == "Median":
+                plt.plot(self.x_plot[:self.marker_pos + 1], self.y_plot[:self.marker_pos + 1], "b--")
+                plt.plot(self.x_plot[self.marker_pos:], self.y_plot[self.marker_pos:], "b--")
+                plt.plot(self.x_plot[self.marker_pos], self.y_plot[self.marker_pos], "bo", markersize=5, markeredgecolor="r", markerfacecolor="r")
+                plt.plot(self.median.filtern(self.y_plot), "g")
+
 
     def insert(self, elem):
         if self.run == True:
@@ -275,3 +294,13 @@ class Plot(tkinter.Frame):
         plt.ylim(y_scale_min, y_scale_max)
         self.set_y_min(y_scale_min)
         self.set_y_max(y_scale_max)
+
+    def fenster_breite_bind(self, para):
+        try:
+         self.mittelwert.set_fenster_breite(int(self.fenster_breite_entry.get()))
+        except:
+            pass
+        try:
+         self.median.set_fenster_breite(int(self.fenster_breite_entry.get()))
+        except:
+            pass

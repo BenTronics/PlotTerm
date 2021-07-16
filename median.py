@@ -20,3 +20,6 @@ class Median():
             else:
                 break
         return self.gefiltert
+
+    def set_fenster_breite(self, breite):
+        self.fenster_breite = breite
