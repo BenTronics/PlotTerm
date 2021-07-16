@@ -6,8 +6,9 @@ import csv
 from tkinter.filedialog import asksaveasfilename
 from mittel import Mittel
 from median import Median
+from tkinter import ttk
 
-#todo: checkbox oder so für mittelwert anzeigen bzw. nicht anzeigen
+#todo: dropdownmenü für auswahl [kein Filter, Mittel, Median], Entry für Fenstergröße
 class Plot(tkinter.Frame):
 
     def __init__(self, root):
@@ -45,37 +46,46 @@ class Plot(tkinter.Frame):
         self.clear_btn.grid(column=2, row=1, columnspan=2)
 
         self.x_limit_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.x_limit_entry.grid(column=0, row=4)
+        self.x_limit_entry.grid(column=0, row=5)
         self.x_limit_entry.insert(0, self.x_limit)
 
         self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_min_entry.grid(column=1, row=4)
+        self.y_min_entry.grid(column=1, row=5)
         self.y_min_entry.insert(0, self.y_min)
 
         self.y_max_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
-        self.y_max_entry.grid(column=2, row=4)
+        self.y_max_entry.grid(column=2, row=5)
         self.y_max_entry.insert(0, self.y_max)
 
         self.x_limit_label = tkinter.Label(self.bedienung_org_frame, text="X Limit", pady=2)
-        self.x_limit_label.grid(column=0, row=3)
+        self.x_limit_label.grid(column=0, row=4)
 
         self.y_min_label = tkinter.Label(self.bedienung_org_frame, text="Y Min", pady=2)
-        self.y_min_label.grid(column=1, row=3)
+        self.y_min_label.grid(column=1, row=4)
 
         self.y_max_label = tkinter.Label(self.bedienung_org_frame, text="Y Max", pady=2)
-        self.y_max_label.grid(column=2, row=3)
+        self.y_max_label.grid(column=2, row=4)
 
         self.übernehmen_btn = tkinter.Button(self.bedienung_org_frame,text="Übernehmen", command=self.übernehmen_cmd, pady=4)
-        self.übernehmen_btn.grid(column=3, row=4)
+        self.übernehmen_btn.grid(column=3, row=5)
 
         self.auto_set_btn = tkinter.Button(self.bedienung_org_frame, text="Auto Set", command=self.auto_set)
         self.auto_set_btn.grid(column=2, row=2)
 
         self.csv_btn = tkinter.Button(self.bedienung_org_frame, text="Export *.csv", command=self.save_csv, pady=4, width=33)
-        self.csv_btn.grid(column=0, row=5, columnspan=4)
+        self.csv_btn.grid(column=0, row=6, columnspan=4)
 
         self.y_autoscale_checkbox = tkinter.Checkbutton(self.bedienung_org_frame, variable=self.y_autoscale, text="Y Autoscale", pady=5)
         self.y_autoscale_checkbox.grid(column=0, row=2, columnspan=2)
+
+        self.drop_down_filter_var = tkinter.StringVar()
+        self.drop_down_filter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_filter_var,state="readonly", width=11)
+        self.drop_down_filter["values"] = ("kein Filter", "Mittel", "Median")
+        self.drop_down_filter.current(0)
+        self.drop_down_filter.grid(column=0, row=3, columnspan=2)
+
+        self.y_min_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.y_min_entry.grid(column=2, row=3)
 
         self.scroll_org_frame = tkinter.Frame(root)
         self.scroll_org_frame.grid(column=0, row=6, columnspan=3)
@@ -83,7 +93,7 @@ class Plot(tkinter.Frame):
         self.entry_org_frame.pack(side="bottom", pady=3)
         self.scroll_y = tkinter.Scrollbar(self.scroll_org_frame)
         self.scroll_y.pack(fill="y", side="right")
-        self.listbox = tkinter.Listbox(self.scroll_org_frame, height=25, width=33)
+        self.listbox = tkinter.Listbox(self.scroll_org_frame, height=24, width=33)
         self.listbox.pack(side="top")
         self.scroll_y["command"] = self.listbox.yview
         self.listbox["yscrollcommand"] = self.scroll_y.set
