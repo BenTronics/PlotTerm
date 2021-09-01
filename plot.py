@@ -6,9 +6,10 @@ import csv
 from tkinter.filedialog import asksaveasfilename
 from mittel import Mittel
 from median import Median
+from ableitung import Ableitung
 from tkinter import ttk
 
-#todo: dropdownmenü für auswahl [kein Filter, Mittel, Median], Entry für Fenstergröße
+
 class Plot(tkinter.Frame):
 
     def __init__(self, root):
@@ -27,6 +28,7 @@ class Plot(tkinter.Frame):
 
         self.mittelwert = Mittel(30)
         self.median = Median(31)
+        self.ableitung = Ableitung()
 
         style.use('ggplot')
         self.fig = plt.figure(figsize=(10, 5), dpi=100)
@@ -80,7 +82,7 @@ class Plot(tkinter.Frame):
 
         self.drop_down_filter_var = tkinter.StringVar()
         self.drop_down_filter = ttk.Combobox(self.bedienung_org_frame, textvariable=self.drop_down_filter_var,state="readonly", width=11)
-        self.drop_down_filter["values"] = ("kein Filter", "Mittel", "Median")
+        self.drop_down_filter["values"] = ("kein Filter", "Mittel", "Median", "1. Ableitung")
         self.drop_down_filter.current(0)
         self.drop_down_filter.grid(column=0, row=3, columnspan=2)
 
@@ -112,6 +114,7 @@ class Plot(tkinter.Frame):
         self.y_max_entry.bind('<MouseWheel>', self.y_max_whell_bind)
 
         self.fenster_breite_entry.bind('<Return>', self.fenster_breite_bind)
+        self.fenster_breite_entry.bind('<MouseWheel>', self.fenster_breite_whell_bind)
 
         #gerbten frame packen
         self.grid()#pack()
@@ -135,6 +138,9 @@ class Plot(tkinter.Frame):
             elif self.drop_down_filter_var.get() == "Median":
                 plt.plot(self.y_plot, "b--")
                 plt.plot(self.median.filtern(self.y_plot), "g")
+            elif self.drop_down_filter_var.get() == "1. Ableitung":
+                plt.plot(self.y_plot, "b--")
+                plt.plot(self.ableitung.filtern(self.y_plot), "g")
             if self.y_autoscale.get() == False:
                 plt.ylim(self.y_min, self.y_max)
             else:
@@ -269,6 +275,34 @@ class Plot(tkinter.Frame):
                 self.y_max -= (self.y_max) / 10
         self.y_max_entry.insert(0, self.y_max)
 
+    def fenster_breite_whell_bind(self, para):
+        tmp = int(self.fenster_breite_entry.get())
+        self.fenster_breite_entry.delete(0, tkinter.END)
+        if para.delta > 0:
+            if self.drop_down_filter_var.get() == "Mittel":
+                self.fenster_breite_entry.insert(0, str(tmp+1))
+                self.mittelwert.set_fenster_breite(tmp+1)
+            elif self.drop_down_filter_var.get() == "Median":
+                if tmp % 2 == 0:
+                    self.median.set_fenster_breite(tmp+1)
+                    self.fenster_breite_entry.insert(0, str(tmp + 1))
+                else:
+                    self.median.set_fenster_breite(tmp+2)
+                    self.fenster_breite_entry.insert(0, str(tmp + 2))
+        else:
+            if tmp > 3:
+                if self.drop_down_filter_var.get() == "Mittel":
+                    self.fenster_breite_entry.insert(0, str(tmp - 1))
+                    self.mittelwert.set_fenster_breite(tmp - 1)
+                elif self.drop_down_filter_var.get() == "Median":
+                    if tmp % 2 == 0:
+                        self.median.set_fenster_breite(tmp - 1)
+                        self.fenster_breite_entry.insert(0, str(tmp - 1))
+                    else:
+                        self.median.set_fenster_breite(tmp - 2)
+                        self.fenster_breite_entry.insert(0, str(tmp - 2))
+        #self.fenster_breite_entry.insert(0, self.y_max)
+
     def clear_cmd(self):
         self.y_plot = []
         self.x_plot = []
@@ -289,11 +323,12 @@ class Plot(tkinter.Frame):
                 csv_file.write(str(self.x_plot[i]) + ";" + str(self.y_plot[i]) + "\n")
 
     def auto_set(self):
-        y_scale_min = min(self.y_plot) - 0.1
-        y_scale_max = max(self.y_plot) + 0.1
-        plt.ylim(y_scale_min, y_scale_max)
-        self.set_y_min(y_scale_min)
-        self.set_y_max(y_scale_max)
+        if len(self.y_plot) > 1:
+            y_scale_min = min(self.y_plot) - 0.1
+            y_scale_max = max(self.y_plot) + 0.1
+            plt.ylim(y_scale_min, y_scale_max)
+            self.set_y_min(y_scale_min)
+            self.set_y_max(y_scale_max)
 
     def fenster_breite_bind(self, para):
         try:
