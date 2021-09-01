@@ -7,6 +7,11 @@ if __name__ == '__main__':
     fenster = Tk()
     fenster.title("PlotTerm")
 
+    try:
+        fenster.iconbitmap("logo.ico")
+    except:
+        pass
+
     L_frame = LabelFrame(fenster, text="Plot Kontrollfenster")
     L_frame.grid(column=0,row=0)
     R_frame = LabelFrame(fenster, text="Terminal")
