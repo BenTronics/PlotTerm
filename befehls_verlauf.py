@@ -6,6 +6,10 @@ class BefehlsVerlauf:
         self.max_num = max_num
 
     def append(self, elem):
+        #Elemnet nicht aufnehmen, wenn es dem letzten eingetragenem Element entspricht
+        if len(self.befehle) > 0:
+            if elem == self.befehle[self.lese_pointer]:
+                return
         self.befehle.append(elem)
         if len(self.befehle) > self.max_num:
             self.befehle = self.befehle[1:]

@@ -1,14 +1,18 @@
-from mittel import Mittel
-from median import Median
-from ableitung import Ableitung
+from befehls_verlauf import BefehlsVerlauf
 
-mittel_filter = Mittel(10)
-median_filter = Median(9)
-ableitung = Ableitung()
+input = [1, 1, 2, 3, 4, 4, 5, 6, 6, 6, 7, 7, 8, 9, 10, 10, 11, 12, 13]
 
-l = [10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
-l2 = [10, 0, 4, 10, 4, 10, 10, 5, 10, 10, 5, 10, 6, 10, 10, 10, 10, 10]
+anzahl = len(input) + 3
 
-#mittel_filter.filtern(l)
-#median_filter.filtern(l2)
-print(ableitung.filtern(l2))
+verlauf = BefehlsVerlauf(anzahl)
+
+
+for elem in input:
+    verlauf.append(elem)
+    print(str(verlauf.lese_pointer) + ":\t\t" + str(verlauf.read()))
+
+print("====================================================================")
+
+for i in range(anzahl):
+    print(str(verlauf.lese_pointer) + ":\t\t" + str(verlauf.read()))
+    verlauf.pointer_up()
