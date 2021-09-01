@@ -26,8 +26,8 @@ class Plot(tkinter.Frame):
         self.y_autoscale.set(0)
         self.marker_pos = 1
 
-        self.mittelwert = Mittel(30)
-        self.median = Median(31)
+        self.mittelwert = Mittel(5)
+        self.median = Median(5)
         self.ableitung = Ableitung()
 
         style.use('ggplot')
@@ -87,6 +87,7 @@ class Plot(tkinter.Frame):
         self.drop_down_filter.grid(column=0, row=3, columnspan=2)
 
         self.fenster_breite_entry = tkinter.Entry(self.bedienung_org_frame, width=5)
+        self.fenster_breite_entry.insert(0, "5")
         self.fenster_breite_entry.grid(column=2, row=3)
 
         self.scroll_org_frame = tkinter.Frame(root)
