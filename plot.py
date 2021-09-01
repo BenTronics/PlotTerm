@@ -307,6 +307,9 @@ class Plot(tkinter.Frame):
     def clear_cmd(self):
         self.y_plot = []
         self.x_plot = []
+        self.ax1.clear()
+        plt.draw()
+        self.listbox.delete(0, tkinter.END)
 
     def save_csv(self):
         if self.run == True:
